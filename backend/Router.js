@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-const web3 = require('web3');
 
 var otp;
 const high = 999999;
@@ -12,32 +11,6 @@ class Router {
         this.isLoggedIn(app,db);
         this.otpPost(app,db);
         this.registerPost(app,db);
-        this.isMetaMaskInstalled(app);
-    }
-
-    async isMetaMaskInstalled(app)
-    {
-        app.get('/ismetamaskinstalled', function(req,res){
-            console.log("here abab");
-            if(web3 == "not_installed")
-            {
-                res.json({
-                    code: 400,
-                    success:false,
-                    msg: 'metamask not installed'
-                });
-                return;
-            }
-            else
-            {
-                res.json({
-                    code: 200,
-                    success:true,
-                    msg: 'metamask installed'
-                });
-                return;
-            }
-        });
     }
 
     registerPost(app,db)
