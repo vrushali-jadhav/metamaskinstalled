@@ -194,6 +194,7 @@ class Router {
         app.post('/login', (req,res) => {
             let username = req.body.username;
             let password = req.body.password;
+
             username = username.toLowerCase();
 
             let cols= [username];

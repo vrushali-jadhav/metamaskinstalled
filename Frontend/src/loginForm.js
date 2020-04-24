@@ -14,6 +14,7 @@ class LoginForm extends React.Component {
         this.state = {
             username: '',
             password: '',
+            privatekey: '',
             buttonDisabled: false
         }
     }
@@ -33,10 +34,12 @@ class LoginForm extends React.Component {
             return;
         if (!this.state.password)
             return;
+        if (!this.state.privatekey)
+            return;
         this.setState({
             buttonDisabled: true
         })
-
+ 
         try {
             console.log(this.state.username);
             let res = await fetch('http://localhost:3002/login', {
@@ -47,7 +50,7 @@ class LoginForm extends React.Component {
                 },
                 body: JSON.stringify({
                     username: this.state.username,
-                    password: this.state.password
+                    password: this.state.password,
                 })
             });
 
@@ -56,6 +59,9 @@ class LoginForm extends React.Component {
                 // let redirectVar = null;
                 UserStorage.isLoggedIn = true;
                 UserStorage.username = result.username;
+
+                //get user json from blockchain and decrypt using private key
+
                 this.props.history.push("/takephoto");
                 console.log("username" + result.username);
                 // redirectVar = <Redirect to="/welcome" />
@@ -117,13 +123,17 @@ class LoginForm extends React.Component {
                     </div>
                 </div>
                 <div className="logindetails">Enter credentials
-           <InputFields type='text' placeholder='Username'
+                    <InputFields type='text' placeholder='Username'
                         value={this.state.username ? this.state.username : ''}
                         onChange={(val) => this.setInputValue('username', val)}
                     />
                     <InputFields type='text' placeholder='Password'
                         value={this.state.password ? this.state.password : ''}
                         onChange={(val) => this.setInputValue('password', val)}
+                    />
+                    <InputFields type='text' placeholder='Metamask account private key'
+                        value={this.state.privatekey ? this.state.privatekey : ''}
+                        onChange={(val) => this.setInputValue('privatekey', val)}
                     />
                     <SubmitButton
                         text='Login'

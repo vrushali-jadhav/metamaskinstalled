@@ -25,6 +25,42 @@ class TakeRegisterPhoto extends Component {
         if (!this.state.username)
         return;
 
+        //create metamask account
+        console.log("creating an account..");
+        var responsemeta = await web3.eth.accounts.create(web3.utils.randomHex(32));
+        console.log(responsemeta);
+        this.state.metaaddress = responsemeta.address;
+        console.log(this.state.metaaddress);
+        this.state.privateKey = responsemeta.privateKey;
+        console.log(this.state.privateKey);
+
+        swal.mixin({
+            confirmButtonText: 'Next &rarr;',
+            showCancelButton: true,
+            progressSteps: ['1', '2', '3']
+        }).queue([
+            {
+                title: 'Step 1',
+                text: 'Your metamask account has been created. Account number: ' + responsemeta.address
+            },
+            {
+                title: 'Step 2',
+                text: 'Kindly safely save the private key displayed in next step. It is required for login.'
+            },
+            {
+                title: 'Step 3',
+                text: this.state.privateKey
+            }
+        ]).then((result) => {
+            if (result.value) {
+            const answers = JSON.stringify(result.value)
+            swal.fire({
+                title: 'All done!',
+                confirmButtonText: 'Lovely!'
+            })
+            }
+        })
+        
         try{
                 console.log('in capture image ')
     
@@ -53,42 +89,6 @@ class TakeRegisterPhoto extends Component {
                             text: 'You have succesfully uploaded your image!',
                             confirmButtonText: "OK"
                         });
-
-                        //create metamask account
-                        console.log("creating an account..");
-                        var responsemeta = await web3.eth.accounts.create(web3.utils.randomHex(32));
-                        console.log(responsemeta);
-                        this.state.metaaddress = responsemeta.address;
-                        console.log(this.state.metaaddress);
-                        this.state.privateKey = responsemeta.privateKey;
-                        console.log(this.state.privateKey);
-
-                        swal.mixin({
-                            confirmButtonText: 'Next &rarr;',
-                            showCancelButton: true,
-                            progressSteps: ['1', '2', '3']
-                        }).queue([
-                            {
-                                title: 'Step 1',
-                                text: 'A private key for your account has been generated.'
-                            },
-                            {
-                                title: 'Step 2',
-                                text: 'Kindly safely save the key displayed in next step. It is required for login.'
-                            },
-                            {
-                                title: 'Step 3',
-                                text: this.state.privateKey
-                            }
-                        ]).then((result) => {
-                            if (result.value) {
-                            const answers = JSON.stringify(result.value)
-                            swal.fire({
-                                title: 'All done!',
-                                confirmButtonText: 'Lovely!'
-                            })
-                            }
-                        })
                         
                         this.props.history.push("/Login");
                     }else{
