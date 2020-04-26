@@ -144,18 +144,26 @@ class TakeRegisterPhoto extends Component {
                                 //store ciphertext on blockchain
                                 console.log("umm: "+result.voterid);
                                 console.log("uhuh: "+ this.state.metaaddress);
-                                console.log("aing: "+ web3.eth.accounts[0]);
-                                web3.eth.defaultAccount = this.state.metaaddress;
-                                var account = web3.eth.accounts[0];
-                                await VoterContract.methods.register(result.voterid, voterinfocipher.toString()).send({from: this.state.metaaddress});
                                 
-                                console.log("Stored the voter on blockchain..");
+                                var accounts = await web3.eth.getAccounts();
+                                console.log("web3", accounts);
+                                console.log("aing: "+ accounts[0]);
+                                web3.eth.defaultAccount = accounts[0];
+                                
+                                await VoterContract.methods.register(result.voterid, voterinfocipher.toString()).send({from: accounts[0]});
+                                
+                                swal.fire({
+                                    icon: 'success',
+                                    title: 'Congratulations!',
+                                    text: 'Voter information stored on blockchain',
+                                    confirmButtonText: "OK"
+                                });
 
-                                const voter = await VoterContract.methods.getVoterInformation(this.state.id).call();
-                                console.log("Got the voter from blockchain: "+voter);
-                                var bytes  = CryptoJS.AES.decrypt(voter.hash, this.state.privateKey);
-                                var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-                                console.log("Decrypted text: ", plaintext);
+                                // const voter = await VoterContract.methods.getVoterInformation(this.state.id).call();
+                                // console.log("Got the voter from blockchain: "+voter);
+                                // var bytes  = CryptoJS.AES.decrypt(voter.hash, this.state.privateKey);
+                                // var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+                                // console.log("Decrypted text: ", plaintext);
                                 
                                 this.props.history.push("/Login");
                             }

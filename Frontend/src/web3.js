@@ -1,18 +1,27 @@
 import Web3 from 'web3';
 var web3;
 
-function validate()
+async function validate() 
 {
-    try{
-        if(window.web3.currentProvider)
+        try
         {
-            web3 = new Web3(window.web3.currentProvider);
+            if (window.ethereum) 
+            {
+                web3 = new Web3(window.ethereum);
+                await window.ethereum.enable();
+                console.log("here");
+            }
+            else if(window.web3.currentProvider)
+            {
+                web3 = new Web3(window.web3.currentProvider);
+            }
         }
-    }
-    catch(e){
-        console.log("In web3 module..");
-        console.log("Metamask is not installed..");
-    }
+        catch(e)
+        {
+            console.log("In web3 module..");
+            console.log("Metamask is not installed..");
+        }
+    
 }
 
 validate();
