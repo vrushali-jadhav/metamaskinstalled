@@ -95,55 +95,68 @@ class RegisterInfo extends Component {
         if (!this.state.password)
             return;
 
-        try {
-            let res = await fetch('http://localhost:3002/registerpost', {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    password: this.state.password,
-                    username:this.state.username,
-                    fname: this.state.fname,
-                    lname: this.state.lname,
-                    dob: this.state.dob,
-                    gender: this.state.gender,
-                    email: this.state.email
-                })
-            });
-            let result = await res.json();
-            if (result && result.success) {
-                console.log("")
-                swal.fire({
-                    icon: 'success',
-                    title: "Verification Email Sent!",
-                    text: "Enter the OTP to verify your Email",
-                    type: "Success",
-                    confirmButtonText: "OK"
-                  });
-                console.log("success");
-                RegisterStorage.email = this.state.email
-                RegisterStorage.username = this.state.username
-                this.props.history.push("/verifyemail");
-            }
-
-            else if (result && result.success === false) {
-                console.log("registration failed ")
-                swal.fire({
-                    icon: 'error',
-                    title: 'Registration failed',
-                    text: 'Try Again',
-                    confirmButtonText: "OK"
+            try {
+                let res = await fetch('http://localhost:3003/registerpost', {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: this.state.password,
+                        username:this.state.username,
+                        fname: this.state.fname,
+                        lname: this.state.lname,
+                        dob: this.state.dob,
+                        gender: this.state.gender,
+                        email: this.state.email
+                    })
                 });
-                this.props.history.push("/RegisterInfo");
+                let result = await res.json();
+                console.log("argghhhhhhhhhhhh");
+                console.log("pass word in registerinfo: "+this.state.password);
+                if (result && result.success) {
+                    swal.fire({
+                        icon: 'success',
+                        title: "Verification Email Sent!",
+                        text: "Enter the OTP to verify your Email",
+                        type: "Success",
+                        confirmButtonText: "OK"
+                      });
+                    
+                    console.log("success");
+                    RegisterStorage.email = this.state.email
+                    RegisterStorage.username = this.state.username
+                    this.props.history.push({
+                        pathname: "/verifyemail",
+                        state: {
+                            password: this.state.password,
+                            username:this.state.username,
+                            fname: this.state.fname,
+                            lname: this.state.lname,
+                            dob: this.state.dob,
+                            gender: this.state.gender,
+                            email: this.state.email
+                        }
+                    });
+                }
+    
+                else if (result && result.success === false) {
+                    console.log("registration failed ")
+                    swal.fire({
+                        icon: 'error',
+                        title: 'Registration failed',
+                        text: 'Try Again',
+                        confirmButtonText: "OK"
+                    });
+                    this.props.history.push("/RegisterInfo");
+                }
             }
-        }
-        catch (e) {
-
-        }
+            catch (e) {
+    
+            }
     }
-
+        
     render() {
         if(typeof web3 !== 'undefined')
         {

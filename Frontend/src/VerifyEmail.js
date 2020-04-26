@@ -10,15 +10,15 @@ import swal from "sweetalert2";
 const notifier = require('node-notifier');
 
 class VerifyEmail extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             otp: '',
-            email: RegisterStorage.email,
-            username:RegisterStorage.username
+            email: '',
+            username: ''
         }
         this.onChange = this.onChange.bind(this);
+        console.log("Props in verify email page: " + this.props.location.state.password + " " + this.props.location.state.username);
     }
 
     onChange(e) {
@@ -50,8 +50,9 @@ class VerifyEmail extends Component {
     async doOtpPost() {
         if (!this.state.otp)
             return;
+    
         try {
-            let res = await fetch('http://localhost:3002/otppost', {
+            let res = await fetch('http://localhost:3003/otppost', {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',
@@ -66,18 +67,28 @@ class VerifyEmail extends Component {
 
             let result = await res.json();
             if (result && result.success) {
-                // let redirectVar = null;
-
                 swal.fire({
                     icon: 'success',
                     title: 'Congrats!! Email Verfied!',
                     text: 'Continue to upload your image!',
                     confirmButtonText: "OK"
                 });
-                console.log("username" + result.username);
-                this.props.history.push("/takeregisterphoto");
-                
-                // redirectVar = <Redirect to="/welcome" />
+
+                console.log("username in verifyemail 1: " + this.state.password);
+                console.log("username in verifyemail 2: " + this.props.location.state.username);
+                console.log(this.props.location);
+                this.props.history.push({
+                    pathname: "/takeregisterphoto",
+                    state: {
+                        password: this.props.location.state.password,
+                        username: this.props.location.state.username,
+                        fname: this.props.location.state.fname,
+                        lname: this.props.location.state.lname,
+                        dob: this.props.location.state.dob,
+                        gender: this.props.location.state.gender,
+                        email: this.props.location.state.email
+                    }
+                });
             }
 
             else if (result && result.success === false) {

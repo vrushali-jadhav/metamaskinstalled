@@ -42,7 +42,7 @@ class LoginForm extends React.Component {
  
         try {
             console.log(this.state.username);
-            let res = await fetch('http://localhost:3002/login', {
+            let res = await fetch('http://localhost:3003/login', {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',
@@ -127,7 +127,7 @@ class LoginForm extends React.Component {
                         value={this.state.username ? this.state.username : ''}
                         onChange={(val) => this.setInputValue('username', val)}
                     />
-                    <InputFields type='text' placeholder='Password'
+                    <InputFields type='password' placeholder='Password'
                         value={this.state.password ? this.state.password : ''}
                         onChange={(val) => this.setInputValue('password', val)}
                     />

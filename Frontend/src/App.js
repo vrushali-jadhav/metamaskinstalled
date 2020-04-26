@@ -12,7 +12,7 @@ class App extends React.Component {
 
   async componentDidMount(){
     try{
-      let res = await fetch('http://localhost:3002/isLoggedIn',  {
+      let res = await fetch('http://localhost:3003/isLoggedIn',  {
         method: 'post',
         headers: {
           headers : {

@@ -11,70 +11,42 @@ class Router {
         this.isLoggedIn(app,db);
         this.otpPost(app,db);
         this.registerPost(app,db);
+        this.voterInfoPost(app,db);
     }
 
     registerPost(app,db)
     {
         app.post('/registerpost', function(req, res) {
             email = req.body.email;
-            var username = req.body.username;
-            var fname = req.body.fname;
-            var lname = req.body.lname;
-            var dob = req.body.dob;
-            var gender = req.body.gender;
-            var salt = bcrypt.genSaltSync(10);
-            var encryptedpassword = bcrypt.hashSync(req.body.password, salt);
-            console.log(email,username, encryptedpassword, fname, lname, dob, gender);
-            var sql = `INSERT INTO users(username,gender, password, firstname, lastname, emailid, dob, emailverified) VALUES(?,?,?,?,?,?,?,?)`;
+            // var salt = bcrypt.genSaltSync(10);
+            // var encryptedpassword = bcrypt.hashSync(req.body.password, salt);
+            // console.log(email,username, encryptedpassword, fname, lname, dob, gender);
+            // var sql = `INSERT INTO users(username,gender, password, firstname, lastname, emailid, dob, emailverified) VALUES(?,?,?,?,?,?,?,?)`;
         
-            db.query(sql, [ username, gender, encryptedpassword, fname, lname, email, dob, 0 ], function(error, results) {
-                if (error) {
-                    console.log('An error ocurred...', error);
-                    res.json({
-                        code: 400,
-                        sucees:false,
-                        msg: 'An error ocurred..'
-                    });
-                    return;
-                } else {
-                    console.log('Success');
-        
-                    otp = Math.floor(Math.random() * (high - low) + low);
-                    console.log(otp);
-                    const data = 'Please Verify your email with the the One-time password given: '.concat(otp.toString());
-                    console.log(data);
-                    var transporter = nodemailer.createTransport({
+            otp = Math.floor(Math.random() * (high - low) + low);
+            console.log(otp);
+            const data = 'Please Verify your email with the the One-time password given: '.concat(otp.toString());
+            console.log(data);
+            var transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
                             user: 'electronicballet@gmail.com',
                             pass: '25623360'
                         }
-                    });
+            });
         
-                    var mailOptions = {
+            var mailOptions = {
                         from: 'electronicballet@gmail.com',
                         to: email,
                         subject: 'Email Verification - ElectronicBallet',
                         text: data
-                    };
-                    var successflag = true;
-                    transporter.sendMail(mailOptions, function(error, info) {
+            };
+            var successflag = true;
+            transporter.sendMail(mailOptions, function(error, info) {
                         if (error) {
                             console.log(error);
                             successflag=false;
-                            // res.json({
-                            //     code: 400,
-                            //     sucees:false,
-                            //     msg: 'An error ocurred..'
-                            // });
-                            // return;
-
                         } else {
-                            // res.json({
-                            //     code: 200,
-                            //     sucees:true,
-                            //     msg: 'An error ocurred..'
-                            // });
                             console.log('Email sent: ' + info.response);
                             res.json({
                                 code: 200,
@@ -83,36 +55,85 @@ class Router {
                             });
                             console.log('Success sign-up');
     
-                            return;
-                            console.log("hello high bye bye");
-                            // return;
+                            return;    
                         }
-                    });
+            });
+            if(successflag){
+                res.json({
+                    code: 200,
+                    success:true,
+                    msg: 'success'
+                });
+                console.log('Success sign-up');
 
-                    console.log("hello high bye bye2");
-                    if(successflag){
+                return;
+            }else{
+                res.json({
+                    code: 400,
+                    success:false,
+                    msg: 'An error occured'
+                });
+                console.log('an error occured sign-up');
+                return;
+            }
+        });
+    }
+
+    voterInfoPost(app,db)
+    {
+        app.post('/voterinfopost', function(req, res) {
+            var username = req.body.username;
+            var password = req.body.password;
+            var metaaddrss = req.body.metamaskaddrss
+            var salt = bcrypt.genSaltSync(10);
+            var encryptedpassword = bcrypt.hashSync(password, salt);
+            console.log(username, encryptedpassword, metaaddrss);
+            var sql = `INSERT INTO Voters(username, password, metamaskaddrs) VALUES(?,?,?)`;
+
+            let cols= [username];
+            db.query('SELECT * FROM Voters where username = ? LIMIT 1', cols, (err, data, fields)=> 
+            {
+                if(data && data.length===1)
+                {
+                    res.json({
+                        code: 400,
+                        sucees:false,
+                        msg: 'Username already taken'
+                    });
+                    return;
+                }
+            });
+
+            db.query(sql, [ username, encryptedpassword, metaaddrss], function(error, results) 
+            {
+                let voterid;
+                if (error) 
+                {
+                    console.log('An error ocurred...', error);
+                    res.json({
+                        code: 400,
+                        sucees:false,
+                        msg: 'An error ocurred..'
+                    });
+                    return;
+                } 
+                else{
+                    console.log('Success saved in DB');
+                    var q = "SELECT id FROM Voters where username = '" + username + "'";
+                    db.query(q, function (err, result, fields) {
+                        if (err) throw err;
+
+                        console.log("voter id: "+result[0].id);
 
                         res.json({
                             code: 200,
                             success:true,
-                            msg: 'success'
+                            voterid: result[0].id
                         });
-                        console.log('Success sign-up');
-
                         return;
-                    }else{
-                      
-                        res.json({
-                            code: 400,
-                            success:false,
-                            msg: 'An error occured'
-                        });
-                        console.log('an error occured sign-up');
-                        return;
-                    }
-                   
+                    });
                 }
-            });
+           });
         });
     }
 
@@ -134,7 +155,7 @@ class Router {
                        });
                        return;
                     } else {
-                        console.log("usernaame"+req.body.username);
+                        console.log("username"+req.body.username);
                         res.json({
                             code:200,
                             success: true,
@@ -198,7 +219,7 @@ class Router {
             username = username.toLowerCase();
 
             let cols= [username];
-             db.query('SELECT * FROM users where username = ? LIMIT 1', cols, (err, data, fields)=> 
+             db.query('SELECT * FROM Voters where username = ? LIMIT 1', cols, (err, data, fields)=> 
              {
                 if(err)
                 {
