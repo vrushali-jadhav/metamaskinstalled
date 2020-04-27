@@ -58,7 +58,7 @@ class TakeRegisterPhoto extends Component {
                         //create metamask account
                         console.log("creating an account..");
                         var responsemeta = await web3.eth.accounts.create(web3.utils.randomHex(32));
-                        console.log(responsemeta);
+                        console.log("responsemeta: "+responsemeta);
                         this.state.metaaddress = responsemeta.address;
                         console.log(this.state.metaaddress);
                         this.state.privateKey = responsemeta.privateKey;
@@ -137,14 +137,12 @@ class TakeRegisterPhoto extends Component {
                                         id: result.msg
                                 }
 
+                                console.log("Type of private key var in register: "+ typeof(this.state.privateKey));
                                 var voterinfocipher = CryptoJS.AES.encrypt(JSON.stringify(voterinfo), this.state.privateKey);
                                 console.log("Encrypted info: ", voterinfocipher.toString());
 
                                 
                                 //store ciphertext on blockchain
-                                console.log("umm: "+result.voterid);
-                                console.log("uhuh: "+ this.state.metaaddress);
-                                
                                 var accounts = await web3.eth.getAccounts();
                                 console.log("web3", accounts);
                                 console.log("aing: "+ accounts[0]);
@@ -158,12 +156,6 @@ class TakeRegisterPhoto extends Component {
                                     text: 'Voter information stored on blockchain',
                                     confirmButtonText: "OK"
                                 });
-
-                                // const voter = await VoterContract.methods.getVoterInformation(this.state.id).call();
-                                // console.log("Got the voter from blockchain: "+voter);
-                                // var bytes  = CryptoJS.AES.decrypt(voter.hash, this.state.privateKey);
-                                // var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-                                // console.log("Decrypted text: ", plaintext);
                                 
                                 this.props.history.push("/Login");
                             }

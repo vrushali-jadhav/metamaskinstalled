@@ -23,6 +23,9 @@ class TakePhoto extends Component {
 
         try{
         console.log('in capture image ');
+
+        var voterinfo = this.props.location.state.voterinfo;
+        console.log("Voter info: " + voterinfo);
         
         var data = {}
         data.username= this.state.username

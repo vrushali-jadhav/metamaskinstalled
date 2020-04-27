@@ -5,8 +5,11 @@ import SubmitButton from './submitButton';
 import UserStorage from './stores/UserStorage';
 import { Link, Redirect } from 'react-router-dom';
 import Register from './Register';
+import swal from "sweetalert2";
 import './App.css';
 import InputFields from './inputFields';
+import VoterContract from './VoterContract';
+var CryptoJS = require("crypto-js");
 
 class LoginForm extends React.Component {
     constructor(props) {
@@ -20,10 +23,6 @@ class LoginForm extends React.Component {
     }
 
     setInputValue(property, val) {
-        //~val = val.trim();
-        if (val.length > 12) {
-            return;
-        }
         this.setState({
             [property]: val
         })
@@ -41,7 +40,9 @@ class LoginForm extends React.Component {
         })
  
         try {
-            console.log(this.state.username);
+            console.log("in dologin: " +this.state.username);
+            console.log("passwrd: " +this.state.password);
+            console.log("pk: " +this.state.privatekey);
             let res = await fetch('http://localhost:3003/login', {
                 method: 'post',
                 headers: {
@@ -53,22 +54,71 @@ class LoginForm extends React.Component {
                     password: this.state.password,
                 })
             });
-
+            
             let result = await res.json();
+            console.log("result: "+result);
+
             if (result && result.success) {
                 // let redirectVar = null;
                 UserStorage.isLoggedIn = true;
                 UserStorage.username = result.username;
+                
+                console.log("Log in successful..");
 
-                //get user json from blockchain and decrypt using private key
+                //get voterid from SQL
+                let res = await fetch('http://localhost:3003/getVoterId', {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: result.username,
+                    })
+                });
 
-                this.props.history.push("/takephoto");
-                console.log("username" + result.username);
-                // redirectVar = <Redirect to="/welcome" />
+                let result2 = await res.json();
+                if (result2 && result2.success){
+                    var id = result2.voterid;
+                    console.log("Voter id: " + id);
+                
+                    //get user json from blockchain and decrypt using private key
+                    const voter = await VoterContract.methods.getVoterInformation(id).call();
+                    console.log("Got the voter from blockchain: "+voter);
+                    var bytes  = CryptoJS.AES.decrypt(voter.hash, this.state.privatekey);
+                    var voterinfo = bytes.toString(CryptoJS.enc.Utf8);
+                    console.log("Voter information after decrption: ", voterinfo);
+                    
+                    this.props.history.push({
+                        pathname: "/takephoto",
+                        state: {
+                            voterinfo: voterinfo
+                        }
+                    });
+                }
+                else{
+                    swal.fire({
+                        icon: 'error',
+                        title: 'Login failed',
+                        text: 'Voter ID not found in DB',
+                        confirmButtonText: "OK"
+                    });
+                    this.props.history.push("/Login");
+                }
             }
 
             else if (result && result.success === false) {
+                swal.fire({
+                    icon: 'error',
+                    title: 'Login failed',
+                    text: 'Username password did not match',
+                    confirmButtonText: "OK"
+                });
+                this.props.history.push("/Login");
+            }
 
+            else{
+                console.log("nothing");
             }
         }
         catch (e) {

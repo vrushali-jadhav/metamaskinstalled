@@ -12,6 +12,7 @@ class Router {
         this.otpPost(app,db);
         this.registerPost(app,db);
         this.voterInfoPost(app,db);
+        this.getVoterId(app,db);
     }
 
     registerPost(app,db)
@@ -209,13 +210,33 @@ class Router {
             }
         });
     }
+    
+    getVoterId(app,db)
+    {
+        app.post('/getVoterId', (req,res) => {
+            console.log("Looking for voter: " + req.body.username);
+            var sqlquery = "SELECT id FROM Voters where username = '" + req.body.username + "'";
+            db.query(sqlquery, function (err, result, fields) 
+            {
+                if (err) throw err;
+                console.log("voter id: "+result[0].id);
+
+                res.json({
+                    code: 200,
+                    success:true,
+                    voterid: result[0].id
+                });
+                return;
+            });
+        });
+    }
 
     login(app,db)
     {
         app.post('/login', (req,res) => {
             let username = req.body.username;
             let password = req.body.password;
-
+            console.log("In login");
             username = username.toLowerCase();
 
             let cols= [username];
@@ -223,6 +244,7 @@ class Router {
              {
                 if(err)
                 {
+                    console.log("error");
                     res.json({
                          success: false,
                         msg: 'An error occured..'
@@ -231,7 +253,8 @@ class Router {
                 }
                 if(data && data.length===1)
                 {
-                     bcrypt.compare(password, data[0].password, (bcryptErr, verfied) => {
+                    console.log("found data.."); 
+                    bcrypt.compare(password, data[0].password, (bcryptErr, verfied) => {
                         if(verfied){
                             req.session.userID = data[0].id;
                             res.json({
@@ -251,10 +274,13 @@ class Router {
                     });
                 }
                 else{
+                    console.log("not found..");
                     res.json({
                         success: false,
                         msg: 'User not found'
                     });
+                    console.log("User not found");
+                    return;
                 }
             });
         });

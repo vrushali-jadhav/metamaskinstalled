@@ -11,14 +11,10 @@ contract VoterContract   {
     }
     
     mapping(uint  => Voter) public voters;
-
-    // Store Voters Count
-    uint public count;
     
     function register(uint id,string  memory _hash) public {
         Voter memory voter = Voter(msg.sender,id,_hash,false);
-        voters[count] = voter;
-        count++;
+        voters[id] = voter;
     }
     
     function userVoted(uint _user_id) public {
@@ -31,15 +27,15 @@ contract VoterContract   {
         return voters[_user_id];
     }
     
-    function getVoterCount() public view returns (uint){
-        return count;
-    }
+    // function getVoterCount() public view returns (uint){
+    //     return count;
+    // }
     
-    function  getVoterList () public view returns (Voter[] memory){
-        Voter[] memory list = new Voter[](count);
-        for(uint i =0 ; i < count; i++){
-            list[i] = voters[i];
-        }
-        return list;
-    }
+    // function  getVoterList () public view returns (Voter[] memory){
+    //     Voter[] memory list = new Voter[](count);
+    //     for(uint i =0 ; i < count; i++){
+    //         list[i] = voters[i];
+    //     }
+    //     return list;
+    // }
 }

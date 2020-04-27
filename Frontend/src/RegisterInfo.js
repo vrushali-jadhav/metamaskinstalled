@@ -113,7 +113,7 @@ class RegisterInfo extends Component {
                     })
                 });
                 let result = await res.json();
-                console.log("argghhhhhhhhhhhh");
+                
                 console.log("pass word in registerinfo: "+this.state.password);
                 if (result && result.success) {
                     swal.fire({
@@ -215,7 +215,7 @@ class RegisterInfo extends Component {
                                             className="registerclass"value={this.state.date} onChange={this.onChange}  id="dob" name="dob" placeholder="Please provide your DoB in mm/dd/yyyy format" required>
                                         </input>
                                         <br></br>
-                                        <input type="list" value={this.state.gender}  onChange={this.onChange} list="genderoptions" className="registerclass" id="gender" name="gender" placeholder="Please select your gender" required>
+                                        <input type="list" value={this.state.gender}  onChange={this.onChange} list="genderoptions" className="registerclass" id="gender" name="gender" placeholder="Please select your gender" required >
                                         </input>
                                         <datalist id="genderoptions">
                                             <option value="Female"></option>
