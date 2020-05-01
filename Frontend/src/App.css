@@ -420,7 +420,7 @@ body, html, #root, .app, .container {
 }
 
 .admin{
-  margin-left: 410px;
+  margin-left: 700px;
 }
 
 .uname, .welcome{
@@ -431,7 +431,7 @@ body, html, #root, .app, .container {
 }
 
 .welcome{
-  margin-left: 590px;
+  margin-left: 950px;
   padding-right: 10px;
 }
 

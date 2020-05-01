@@ -14,7 +14,7 @@ contract VoterContract   {
       struct Candidate {
         uint candidate_id;
         string first_name;
-        string ~;
+        string last_name;
         string candidate_info;
         string candidate_desc;
         uint voteCount;

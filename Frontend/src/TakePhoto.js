@@ -19,25 +19,24 @@ class TakePhoto extends Component {
     }
     async captureImage() {
         console.log('in capture image ')
-        // if (!this.state.username)
-        // return;
 
         try{
-        console.log('in capture image ');
+        console.log('in capture image for login: '+this.props.location);
 
-        var voterinfo = this.props.location.state.voterinfo;
-        console.log("Voter info: " + voterinfo);
+        var fv = this.props.location.state.voterfv;
+        console.log("Feature vector to be passed: " + fv);
         
-        var data = {}
+        var data = {"username":this.state.username,
+        "feature_vector":fv}
         data.username= this.state.username
-        //const response = await axios.post('http://localhost:5000/api/predict',data)
+        const response = await axios.post('http://localhost:5000/api/predict',data)
 
-        //console.log(" response.data" + response)
-        //console.log(" response.data" + JSON.stringify(response.data))
+        console.log(" response.data" + response)
+        console.log(" response.data" + JSON.stringify(response.data))
 
-        //let result = response.data.success;
-
-            // if (result) {
+        let result = response.data.success;
+        let spoofing = response.data.spoofing
+            if (result) {
                 console.log("image verification success");
                 swal.fire({
                     icon: 'success',
@@ -47,21 +46,31 @@ class TakePhoto extends Component {
                 });
 
                 this.props.history.push({
-                    pathname: "/welcome",
-                    state: {
+                        pathname: "/welcome",
+                        state: {
                             username:this.state.username,
-                    }
+                        }
+                    });
+            }else if (spoofing){
+                console.log("image verification failed");
+                swal.fire({
+                    icon: 'error',
+                    title: 'Looks like a spoofing attack!',
+                    text: 'Last warning, account will be terminated next time.',
+                    confirmButtonText: "OK"
                 });
-            // }else{
-            //     console.log("image verification failed");
-            //     swal.fire({
-            //         icon: 'error',
-            //         title: 'Image Verification Failed!',
-            //         text: 'You have failed image verification Try again',
-            //         confirmButtonText: "OK"
-            //     });
-            //     this.props.history.push("/Login");
-            // }
+                this.props.history.push("/Login");
+            }
+            else{
+                console.log("image verification failed");
+                swal.fire({
+                    icon: 'error',
+                    title: 'Image Verification Failed!',
+                    text: 'You have failed image verification Try again',
+                    confirmButtonText: "OK"
+                });
+                this.props.history.push("/Login");
+            }
         }
         catch(e){}
     }

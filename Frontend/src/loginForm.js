@@ -79,6 +79,7 @@ class LoginForm extends React.Component {
                 let result2 = await res.json();
                 if (result2 && result2.success){
                     var id = result2.voterid;
+                    console.log("Voter id: " + id);
                 
                     //get user json from blockchain and decrypt using private key
                     const voter = await VoterContract.methods.getVoterInformation(id).call();
@@ -86,11 +87,14 @@ class LoginForm extends React.Component {
                     var bytes  = CryptoJS.AES.decrypt(voter.hash, this.state.privatekey);
                     var voterinfo = bytes.toString(CryptoJS.enc.Utf8);
                     console.log("Voter information after decrption: ", voterinfo);
+
+                    var infojson = JSON.parse(voterinfo);
+                    console.log("in json: "+infojson);
                     
                     this.props.history.push({
                         pathname: "/takephoto",
                         state: {
-                            voterinfo: voterinfo
+                            voterfv: infojson.fv
                         }
                     });
                 }
