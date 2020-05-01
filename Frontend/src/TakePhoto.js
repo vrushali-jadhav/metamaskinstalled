@@ -15,6 +15,7 @@ class TakePhoto extends Component {
             username: UserStorage.username      
           }
         this.captureImage = this.captureImage.bind(this);
+        
     }
     async captureImage() {
         console.log('in capture image ')
@@ -29,14 +30,14 @@ class TakePhoto extends Component {
         
         var data = {}
         data.username= this.state.username
-        const response = await axios.post('http://localhost:5000/api/predict',data)
+        //const response = await axios.post('http://localhost:5000/api/predict',data)
 
-        console.log(" response.data" + response)
-        console.log(" response.data" + JSON.stringify(response.data))
+        //console.log(" response.data" + response)
+        //console.log(" response.data" + JSON.stringify(response.data))
 
-        let result = response.data.success;
+        //let result = response.data.success;
 
-            if (result) {
+            // if (result) {
                 console.log("image verification success");
                 swal.fire({
                     icon: 'success',
@@ -45,17 +46,22 @@ class TakePhoto extends Component {
                     confirmButtonText: "OK"
                 });
 
-                this.props.history.push("/welcome");
-            }else{
-                console.log("image verification failed");
-                swal.fire({
-                    icon: 'error',
-                    title: 'Image Verification Failed!',
-                    text: 'You have failed image verification Try again',
-                    confirmButtonText: "OK"
+                this.props.history.push({
+                    pathname: "/welcome",
+                    state: {
+                            username:this.state.username,
+                    }
                 });
-                this.props.history.push("/Login");
-            }
+            // }else{
+            //     console.log("image verification failed");
+            //     swal.fire({
+            //         icon: 'error',
+            //         title: 'Image Verification Failed!',
+            //         text: 'You have failed image verification Try again',
+            //         confirmButtonText: "OK"
+            //     });
+            //     this.props.history.push("/Login");
+            // }
         }
         catch(e){}
     }
@@ -66,25 +72,20 @@ class TakePhoto extends Component {
        
  <div className ="container">
         <div className= "header">
-                <ul className="navbar-nav" id="navg">
-                    <li className="nav-item">
-                    <Link to="/RegisterInfo" className="nav-link reg" id="log"> Register
-                    </Link>
-                    </li>
-                    <li className="nav-item">
-                    <Link to="/Login" className="nav-link" id="log"> Login
-                    </Link>
-                    </li>
-                    {/* <li className="nav-item">
-                        <a className="nav-link active" id="hom" >Home</a>
-                    </li> */}
-                    <li className="nav-item">
-                        <a className=" brand">Electronic</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className=" colorb">Ballot</a>
-                    </li>
-                </ul>
+        <ul className="navbar-nav" id="navg">
+                            <li className="nav-item">
+                                <a className=" brand">Electronic</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="colorb">Ballot</a>
+                            </li>
+                            <Link to="/AdminLogin" className="nav-item nav-link admin" id="log"> Setup-Campaign
+                            </Link>
+                            <Link to="/RegisterInfo" className="nav-item nav-link reg" id="log"> Register
+                            </Link>
+                            <Link to="/Login" className="nav-item nav-link log" id="log"> Login
+                            </Link>
+                        </ul>
         </div>
         <div className="row">
             <div className="pitchline" id="pitch">
@@ -104,12 +105,11 @@ class TakePhoto extends Component {
             </div>
             </div>
             <div className="canvasphoto" id="canvas" >
-                    <div>Photo:</div>
-                    <video className="videoclass" id="videoForImage" autoPlay width="250px" height="200px"></video>
-                    <div></div>
-                    <button className="btn" id="capture" onClick={this.captureImage}>Capture</button>
+                <div className="phototext">Take a picture!</div>
+                    <div className="userimage"></div>
+                    <button className="btn cap" id="capture" onClick={this.captureImage}>Capture</button>
+                </div>
             </div>
-    </div>
  </div>
       );
     }

@@ -12,11 +12,16 @@
 
   .overlayingreg
 {
+  box-sizing: border-box;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 40px;
+  padding-top:25px;
+  margin-top: 130px;
   width: 35%;
-  height: 70%;
+  height: 78%;
   position: absolute;
-  margin-top: 9%;
-  margin-left:60%;
+  margin-left:58%;
   margin-right:10%;
   z-index: 2;
   border-radius: 10px;
@@ -28,9 +33,6 @@
   box-shadow:inset 0 0 8px 3px #2eca6a;
   color: black;
   font-weight: bold;
-  padding-top: 30px;
-  padding-left: 20px;
-  padding-right: 20px;
 }
 
 .qoutereg
@@ -64,16 +66,15 @@
 
 .registerclass
 {
-  margin-top:2%;
+  margin-top:3%;
   margin-left: 2%;
   margin-right: 2%;
-  width: 90%;
-  height: 6%;
+  width: 95%;
+  height: 8%;
   border-radius: 10px;
   font-size: 20px;
   font-family: 'Poppins', sans-serif;
   padding-left: 15px;
-  padding-bottom: 5px;
   border: none;
   border-right: solid #2eca6a 3px;
   border-bottom: solid #2eca6a 3px;
@@ -87,15 +88,32 @@
 }
 
 .rg{
-  width: 35%;
+  width: 30%;
   font-size: 20px;
   font-family: 'Poppins', sans-serif;
   border-radius: 15px;
-  height: 8%;
+  height: 10%;
   font-size: 25px;
   color: black;
-  background-color: #2eca6a;
-  margin-bottom: 3%;
+  background-color:#2eca6a;
   border: none;
-  margin-bottom: 50px;
+  font-weight: normal;
 }
+
+.reg1
+{
+  padding-right: 10px;
+  padding-left:550px;
+  color: #2eca6a;
+  font-family: 'Poppins', sans-serif;
+  font-size: 30px;
+}
+
+.reg2{
+  font-family: 'Poppins', sans-serif;
+  font-size: 30px;
+}
+
+.submitButton {
+  padding-top: 0px;
+ }

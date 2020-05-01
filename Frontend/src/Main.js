@@ -6,10 +6,14 @@ import Register from "./Register";
 import RegisterInfo from "./RegisterInfo";
 import TakePhoto from "./TakePhoto";
 import TakeRegisterPhoto from "./TakeRegisterPhoto";
+import CandidateList from "./CandidateList";
 import Welcome from "./Welcome";
 import VerifyEmail from "./VerifyEmail";
 import { Link, Redirect } from 'react-router-dom';
+import AdminLogin from "./AdminLogin"
 import MainHome from "./MainHome";
+import CandidateDetail from "./CandidateDetail"
+
 
 class Main extends Component {
     render() {
@@ -23,6 +27,9 @@ class Main extends Component {
                     <Route exact path="/welcome" component={Welcome} />
                     <Route exact path="/verifyemail" component={VerifyEmail} />
                     <Route exact path="/takeregisterphoto" component={TakeRegisterPhoto} />
+                    <Route exact path="/AdminLogin" component={AdminLogin} />
+                    <Route exact path="/candidatelist" component={CandidateList} />
+                    <Route exact path="/CandidateDetail" component={CandidateDetail} />
                 </div>
             </div>
         );

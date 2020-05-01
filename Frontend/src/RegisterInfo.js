@@ -8,6 +8,7 @@ import web3 from './web3';
 import ModalToInstallMeta from "./Modal";
 import { Button, Modal } from 'react-bootstrap';
 import MainHome from "./MainHome";
+import SubmitButton from './submitButton';
 
 const notifier = require('node-notifier');
 
@@ -166,21 +167,19 @@ class RegisterInfo extends Component {
                         <div className= "header">
                         <ul className="navbar-nav" id="navg">
                             <li className="nav-item">
-                            <Link to="/RegisterInfo" className="nav-link reg" id="log"> Register
-                            </Link>
-                            </li>
-                            <li className="nav-item">
-                            <Link to="/Login" className="nav-link" id="log"> Login
-                            </Link>
-                            </li>
-                            <li className="nav-item">
                                 <a className=" brand">Electronic</a>
                             </li>
                             <li className="nav-item">
-                                <a className=" colorb">Ballot</a>
+                                <a className="colorb">Ballot</a>
                             </li>
+                            <Link to="/AdminLogin" className="nav-item nav-link admin" id="log"> Setup-Campaign
+                            </Link>
+                            <Link to="/RegisterInfo" className="nav-item nav-link reg3" id="log"> Register
+                            </Link>
+                            <Link to="/Login" className="nav-item nav-link log" id="log"> Login
+                            </Link>
                         </ul>
-                    </div>
+                        </div>
                     <div className="row">
                             <div className="pitchline" id="pitch">
                                 <div id="Main">Online election perfection!</div>
@@ -212,7 +211,7 @@ class RegisterInfo extends Component {
                                         <br></br>
                                         <input type="date" placeholder="Please Enter your Date of Birth"
                                             // onFocus={this.type = 'date'} 
-                                            className="registerclass"value={this.state.date} onChange={this.onChange}  id="dob" name="dob" placeholder="Please provide your DoB in mm/dd/yyyy format" required>
+                                            className="registerclass" value={this.state.date} onChange={this.onChange}  id="dob" name="dob" placeholder="Please provide your DoB in mm/dd/yyyy format" required>
                                         </input>
                                         <br></br>
                                         <input type="list" value={this.state.gender}  onChange={this.onChange} list="genderoptions" className="registerclass" id="gender" name="gender" placeholder="Please select your gender" required >

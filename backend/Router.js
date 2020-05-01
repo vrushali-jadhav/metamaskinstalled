@@ -13,6 +13,12 @@ class Router {
         this.registerPost(app,db);
         this.voterInfoPost(app,db);
         this.getVoterId(app,db);
+        this.candidateList(app,db);
+        this.candidatePost(app,db);
+        this.candidateCount(app,db);
+        this.getStartFrom(app,db);
+        this.settleElection(app,db);
+        this.electionSetteled(app,db);
     }
 
     registerPost(app,db)
@@ -79,6 +85,161 @@ class Router {
             }
         });
     }
+    candidateList(app,db)
+    {
+        app.get('/candidatelist', function(req, res) {
+            var sql = `SELECT * From Candidates`;
+            db.query(sql, function (err, result, fields) {
+                if (err) throw err;
+                //var candidates=[];
+                //candidates= result
+                res.json({
+                    code: 200,
+                    success:true,
+                    data: result
+                });
+                return;
+            });
+
+
+        });
+    }
+    candidateCount(app,db)
+    {
+        app.get('/candidateCount', function(req, res) {
+            var sql = `Select COUNT(*) as count from Candidates` ;
+            db.query(sql, function (err, result, fields) {
+                if (err) throw err;
+
+                console.log("count is: "+result);
+                //var candidates=[];
+                //candidates= result
+                //var max= result;
+                //console.log(max);
+                res.json({
+                    code: 200,
+                    success:true,
+                    data: result
+                });
+                return;
+            });
+        });
+    }
+
+    getStartFrom(app,db)
+    {
+        app.get('/getStartFrom', function(req, res) {
+            console.log("in getStartFrom")
+            var sql = `SELECT candidate_id FROM Candidates LIMIT 1` ;
+            db.query(sql, function (err, result, fields) {
+                if (err) throw err;
+
+                res.json({
+                    code: 200,
+                    success:true,
+                    data: result
+                });
+                return;
+            });
+        });
+    }
+
+    settleElection(app,db)
+    {
+        app.post('/settleElection', function(req, res) {
+            console.log("in settleElection")
+            var name = req.body.name;
+            var setteled = req.body.settled;
+            var timestamp = req.body.timestamp;
+
+            var sql = `INSERT INTO Setteled (setteled, winner, setteledon) VALUES(?,?,?)`;
+            db.query(sql, [setteled, name, timestamp], function(error, result) 
+            {
+                let candidate_id;
+                if (error) 
+                {
+                    console.log('An error ocurred...', error);
+                    res.json({
+                        code: 400,
+                        sucees:false,
+                        msg: 'An error ocurred..'
+                    });
+                    return;
+                } 
+                else{
+                    console.log('Success saved in DB');
+                    console.log('insertid ', result.insertId);
+
+                    res.json({
+                        code: 200,
+                        success:true
+                    });
+                    return;
+                }
+           });
+        });
+    }
+
+    electionSetteled(app,db)
+    {
+        app.get('/electionSetteled', function(req, res) {
+            console.log("in electionSetteled")
+            var sql = `SELECT winner FROM Setteled LIMIT 1` ;
+            db.query(sql, function (err, result, fields) {
+                if (err) throw err;
+
+                res.json({
+                    code: 200,
+                    success:true,
+                    data: result
+                });
+                return;
+            });
+        });
+    }
+
+    candidatePost(app,db)
+    {
+        app.post('/newcandidate', function(req, res) {
+           // var candidate_id = req.body.candidate_id,
+            var first_name= req.body.first_name;
+            var last_name = req.body.last_name;
+            var candidate_info= req.body.candidate_info;
+            var candidate_desc= req.body.candidate_desc;
+            var voteCount = req.body.voteCount;
+
+            console.log (first_name, last_name, candidate_info, candidate_desc, voteCount);
+            var sql = `INSERT INTO Candidates (first_name, last_name, candidate_info, candidate_desc, voteCount) VALUES(?,?,?,?,?)`;
+
+
+            db.query(sql, [ first_name, last_name, candidate_info, candidate_desc, voteCount], function(error, result) 
+            {
+                let candidate_id;
+                if (error) 
+                {
+                    console.log('An error ocurred...', error);
+                    res.json({
+                        code: 400,
+                        sucees:false,
+                        msg: 'An error ocurred..'
+                    });
+                    return;
+                } 
+                else{
+                    console.log('Success saved in DB');
+
+                    console.log('insertid ', result.insertId);
+
+                    res.json({
+                                code: 200,
+                                success:true,
+                                candidate_id: result.insertId
+                            });
+                            return;
+                }
+           });
+        });
+    }
 
     voterInfoPost(app,db)
     {
@@ -123,9 +284,6 @@ class Router {
                     var q = "SELECT id FROM Voters where username = '" + username + "'";
                     db.query(q, function (err, result, fields) {
                         if (err) throw err;
-
-                        console.log("voter id: "+result[0].id);
-
                         res.json({
                             code: 200,
                             success:true,
@@ -219,8 +377,6 @@ class Router {
             db.query(sqlquery, function (err, result, fields) 
             {
                 if (err) throw err;
-                console.log("voter id: "+result[0].id);
-
                 res.json({
                     code: 200,
                     success:true,

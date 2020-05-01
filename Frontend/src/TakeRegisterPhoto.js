@@ -189,22 +189,18 @@ class TakeRegisterPhoto extends Component {
        
  <div className ="container">
         <div className= "header">
-        <ul className="navbar-nav" id="navg">
-                    <li className="nav-item">
-                    <Link to="/RegisterInfo" className="nav-link reg" id="log"> Register
-                    </Link>
-                    </li>
-                    <li className="nav-item">
-                    <Link to="/Login" className="nav-link" id="log"> Login
-                    </Link>
-                    </li>
-                    <li className="nav-item">
-                        <a className=" brand">Electronic</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className=" colorb">Ballot</a>
-                    </li>
-                </ul>
+            <li className="nav-item">
+                <a className=" brand">Electronic</a>
+            </li>
+            <li className="nav-item">
+                <a className="colorb">Ballot</a>
+            </li>
+            <Link to="/AdminLogin" className="nav-item nav-link admin" id="log"> Setup-Campaign
+            </Link>
+            <Link to="/RegisterInfo" className="nav-item nav-link reg" id="log"> Register
+            </Link>
+            <Link to="/Login" className="nav-item nav-link log" id="log"> Login
+            </Link>
         </div>
 
     <div className="row">
@@ -225,7 +221,7 @@ class TakeRegisterPhoto extends Component {
             </div>
             </div>
             <div className="canvasphoto" id="canvas" >
-                    <div>Photo:</div>
+            <div className="phototext">Photo:</div>
                     <video className="videoclass" id="videoForImage" autoPlay width="250px" height="200px"></video>
                     <div></div>
                     <button className="btn" id="capture" onClick={this.captureImage}>Capture</button>

@@ -4,7 +4,6 @@ import inputFields from './inputFields';
 import SubmitButton from './submitButton';
 import UserStorage from './stores/UserStorage';
 import { Link, Redirect } from 'react-router-dom';
-import Register from './Register';
 import swal from "sweetalert2";
 import './App.css';
 import InputFields from './inputFields';
@@ -80,7 +79,6 @@ class LoginForm extends React.Component {
                 let result2 = await res.json();
                 if (result2 && result2.success){
                     var id = result2.voterid;
-                    console.log("Voter id: " + id);
                 
                     //get user json from blockchain and decrypt using private key
                     const voter = await VoterContract.methods.getVoterInformation(id).call();
@@ -138,25 +136,20 @@ class LoginForm extends React.Component {
                 {/* {redirectVar} */}
                 {/* <div className="body"> */}
                 <div className="header">
-                    <ul className="navbar-nav" id="navg">
-                        <li className="nav-item">
-                            <Link to="/RegisterInfo" className="nav-link reg" id="log"> Register
-                    </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/Login" className="nav-link" id="log"> Login
-                    </Link>
-                        </li>
-                        {/* <li className="nav-item">
-                        <a className="nav-link active" id="hom" >Home</a>
-                    </li> */}
-                        <li className="nav-item">
-                            <a className=" brand">Electronic</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className=" colorb">Ballot</a>
-                        </li>
-                    </ul>
+                <ul className="navbar-nav" id="navg">
+                            <li className="nav-item">
+                                <a className=" brand">Electronic</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="colorb">Ballot</a>
+                            </li>
+                            <Link to="/AdminLogin" className="nav-item nav-link admin" id="log"> Setup-Campaign
+                            </Link>
+                            <Link to="/RegisterInfo" className="nav-item nav-link reg" id="log"> Register
+                            </Link>
+                            <Link to="/Login" className="nav-item nav-link log3" id="log"> Login
+                            </Link>
+                        </ul>
                 </div>
                 <div className="row">
                     <div className="pitchline" id="pitch">
@@ -185,7 +178,7 @@ class LoginForm extends React.Component {
                         value={this.state.privatekey ? this.state.privatekey : ''}
                         onChange={(val) => this.setInputValue('privatekey', val)}
                     />
-                    <SubmitButton
+                    <SubmitButton className="submitButtonLogin"
                         text='Login'
                         disabled={this.state.buttonDisabled}
                         onClick={() => this.doLogin()}

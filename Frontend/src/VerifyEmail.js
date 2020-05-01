@@ -111,6 +111,13 @@ class VerifyEmail extends Component {
             <div className="container">
                 <div className= "header">
                 <ul className="navbar-nav" id="navg">
+                    
+                    <li className="nav-item">
+                        <a className=" brand">Electronic</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className=" colorb">Ballot</a>
+                    </li>
                     <li className="nav-item">
                     <Link to="/RegisterInfo" className="nav-link reg" id="log"> Register
                     </Link>
@@ -119,12 +126,7 @@ class VerifyEmail extends Component {
                     <Link to="/Login" className="nav-link" id="log"> Login
                     </Link>
                     </li>
-                    <li className="nav-item">
-                        <a className=" brand">Electronic</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className=" colorb">Ballot</a>
-                    </li>
+                   
                 </ul>
         </div>
 

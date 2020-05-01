@@ -19,22 +19,17 @@ class MainHome extends Component {
                     <div className="header">
                         <ul className="navbar-nav" id="navg">
                             <li className="nav-item">
-                                <Link to="/RegisterInfo" className="nav-link reg" id="log"> Register
-                            </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to="/Login" className="nav-link" id="log"> Login
-                            </Link>
-                            </li>
-                            {/* <li className="nav-item">
-                                <a className="nav-link active" id="hom" >Home</a>
-                            </li> */}
-                            <li className="nav-item">
                                 <a className=" brand">Electronic</a>
                             </li>
                             <li className="nav-item">
-                                <a className=" colorb">Ballot</a>
+                                <a className="colorb">Ballot</a>
                             </li>
+                            <Link to="/AdminLogin" className="nav-item nav-link admin" id="log"> Setup-Campaign
+                            </Link>
+                            <Link to="/RegisterInfo" className="nav-item nav-link reg" id="log"> Register
+                            </Link>
+                            <Link to="/Login" className="nav-item nav-link log" id="log"> Login
+                            </Link>
                         </ul>
                     </div>
                     <div className="row">

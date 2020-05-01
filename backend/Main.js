@@ -16,7 +16,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'Admin@123',
-    database: 'Evoting'
+    database: 'EvotingNew'
 });
 
 db.connect(function(err){
